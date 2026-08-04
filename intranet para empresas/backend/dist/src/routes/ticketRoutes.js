@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const TicketController_1 = require("../controllers/TicketController");
+const router = (0, express_1.Router)();
+router.get('/', TicketController_1.TicketController.index);
+router.get('/categories', TicketController_1.TicketController.getCategories);
+router.post('/categories', TicketController_1.TicketController.createCategory);
+router.delete('/categories/:id', TicketController_1.TicketController.deleteCategory);
+router.get('/:id', TicketController_1.TicketController.show);
+router.post('/', TicketController_1.TicketController.create);
+router.patch('/:id', TicketController_1.TicketController.update);
+router.post('/:id/messages', TicketController_1.TicketController.addMessage);
+exports.default = router;

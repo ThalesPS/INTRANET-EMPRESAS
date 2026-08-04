@@ -1,0 +1,181 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(uuid())
+  email       String   @unique
+  name        String
+  username    String?  @unique
+  birthDate   String?  // Formato: YYYY-MM-DD
+  password    String   @default("123@mudar")
+  role        String
+  jobTitle    String?
+  department  String
+  avatarUrl   String?
+  coverUrl    String?
+  bio         String?
+  phone       String?
+  manager     String?
+  skills      String?  
+  active      Boolean  @default(true)
+  firstAccess Boolean  @default(true)
+  isManager   Boolean  @default(false)
+  acceptedPolicy Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  history     CareerEvent[]
+  vacations   Vacation[]
+}
+
+model Vacation {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  startDate   String   // Formato YYYY-MM-DD
+  endDate     String   // Formato YYYY-MM-DD
+  status      String   @default("Pendente") // "Pendente", "Aprovado", "Rejeitado"
+  approvedBy  String?  // Nome ou ID do Gestor/RH
+  createdAt   DateTime @default(now())
+}
+
+model CareerEvent {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  type        String   
+  description String
+  date        String
+  createdAt   DateTime @default(now())
+}
+
+model Announcement {
+  id          String   @id @default(uuid())
+  title       String
+  content     String
+  category    String   // "Geral", "Evento", "TI", "RH"
+  author      String
+  createdAt   DateTime @default(now())
+}
+
+model Ticket {
+  id          String   @id @default(uuid())
+  code        String   @unique
+  subject     String
+  category    String
+  department  String   @default("RH") // "RH" ou "Financeiro"
+  description String
+  priority    String   
+  status      String   @default("aberto")
+  author      String   
+  assignee    String?  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  messages    TicketMessage[]
+}
+
+model TicketMessage {
+  id        String   @id @default(uuid())
+  ticketId  String
+  ticket    Ticket   @relation(fields: [ticketId], references: [id])
+  author    String   
+  content   String   
+  isSystem  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model TicketCategory {
+  id          String   @id @default(uuid())
+  name        String
+  department  String   // "RH" ou "Financeiro"
+  createdAt   DateTime @default(now())
+  
+  @@unique([name, department])
+}
+
+model DocumentCategory {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  createdAt DateTime   @default(now())
+}
+
+model Document {
+  id        String   @id @default(uuid())
+  name      String
+  type      String
+  size      String
+  version   String   @default("v1.0")
+  category  String
+  url       String
+  author    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model QuickLink {
+  id        String   @id @default(uuid())
+  label     String
+  url       String
+  createdAt DateTime @default(now())
+}
+
+model Post {
+  id        String    @id @default(uuid())
+  author    String
+  content   String
+  imageUrl  String?
+  likedBy   String[]
+  createdAt DateTime  @default(now())
+  comments  Comment[]
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author    String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model CompanyEvent {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  date        String   // "YYYY-MM-DD"
+  type        String   @default("Evento") // Evento, Feriado, TI, Confraternização
+  author      String
+  createdAt   DateTime @default(now())
+}
+
+model CompanyRole {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+}
+
+model SystemSetting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+model NotaFiscal {
+  id              String   @id @default(uuid())
+  colaboradorId   String
+  nomeColaborador String
+  mesCompetencia  String
+  valor           Float
+  status          String   @default("Pendente")
+  tipo            String   @default("Nota Fiscal")
+  motivoRecusa    String?
+  aprovador       String?
+  arquivoUrl      String
+  createdAt       DateTime @default(now())
+}

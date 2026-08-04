@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const QuickLinkController_1 = require("../controllers/QuickLinkController");
+const router = (0, express_1.Router)();
+router.get('/', QuickLinkController_1.QuickLinkController.index);
+router.post('/', QuickLinkController_1.QuickLinkController.create);
+router.put('/:id', QuickLinkController_1.QuickLinkController.update);
+router.delete('/:id', QuickLinkController_1.QuickLinkController.delete);
+exports.default = router;
