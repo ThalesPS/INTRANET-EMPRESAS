@@ -1,6 +1,6 @@
 # Intranet 🚀
 
-Salve! Esse é o repositório principal da intranet da Neon Flow. O projeto é dividido em duas partes: um backend em Node.js (com Express e Prisma) e um frontend em React (usando Vite, Tailwind v4 e Radix UI). 
+Salve! Esse é o repositório principal da intranet. O projeto é dividido em duas partes: um backend em Node.js (com Express e Prisma) e um frontend em React (usando Vite, Tailwind v4 e Radix UI). 
 
 Aqui você vai encontrar tudo o que precisa pra rodar o projeto na sua máquina ou subir num servidor.
 
